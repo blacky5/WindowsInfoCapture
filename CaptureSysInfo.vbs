@@ -5,7 +5,7 @@ Dim objFSO, objFile
 Const ForReading = 1, ForWriting = 2, ForAppending = 8
 Const Create = true
 Dim cAuthor, iIHnr
-strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.txt" )
+strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.TRP" )
 
 ''Arguments Aufruf und Formatierung
 ''Argument1 = IH (XXXXX) ; Argument2 = ggf. Authorenkürzel
