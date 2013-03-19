@@ -4,23 +4,24 @@ DIM strName, strKey, strPId, strOSType, strPath
 Dim objFSO, objFile
 Const ForReading = 1, ForWriting = 2, ForAppending = 8
 Const Create = true
+Dim cAuthor, iIHnr
+strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.txt" )
 
-strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.trp" )
-''Dim strFormatVersion as String = "IA#7"
-
-''Arguments Aufruf
+''Arguments Aufruf und Formatierung
 ''Argument1 = IH (XXXXX) ; Argument2 = ggf. Authorenkürzel
 Dim strTRP
 Set strTRP = WScript.arguments
-
+if len(strTRP(0)<6) then
+iIHnr = String(6-len(strTRP(0)),"0") & strTRP(0)	''IH Nummer muss Sechsstellig sein, Erste Ziffer unbedingt eine 0
+end if
+cAuthor = ucase(Left(strTRP(1),1))	''Authorenkürzel darf nur ein Zeichen lang und Groß sein
 
 ''Haupt Programm
-strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName")
-strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE")
+Save("IA#7")	''Versions Hinweis für das mit den Daten weiterarbeitende Programm
+strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName") ''Liest das Betriebsystem aus
+strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE") ''Liest die installierte Architektur vom Betriebssystem aus
 IF Len(strName) > 0 THEN
-   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId")
-   ''System("echo IA#7 > " & strPath)
-   ''Save(strFormatVersion)
+   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId") ''Liest die ProductID aus zum dekodieren des Lizenzschlüssels
 	Dim strTempOS
 	If instr(strName,"XP") > 0 then
 			strTempOS = "XP"
@@ -32,10 +33,10 @@ IF Len(strName) > 0 THEN
 			strTempOS = "8"
 	End If
     Select Case strOSType
-		Case "x86" Save(strTRP(0) & " " & date & " ~   " & strTRP(1) & " OS=Win" & strTempOS & "_32")
-		Case "AMD64" Save(strTRP(0) & " " & date & " ~   " & strTRP(1) & " OS=Win" & strTempOS & "_64")
+		Case "x86" Save(iIHnr & " " & date & " ~   " & cAuthor & " OS=Win" & strTempOS & "_32")
+		Case "AMD64" Save(iIHnr & " " & date & " ~   " & cAuthor & " OS=Win" & strTempOS & "_64")
 	End Select
-   Save(strTRP(0) & " " & date & " ~   " & strTRP(1) & " productkey=" & strKey)
+   Save(iIHnr & " " & date & " ~   " & cAuthor & " productkey=" & strKey)
    GetNWInfos
 END IF
 ''Ende des Programms
@@ -51,7 +52,7 @@ Function Save(Content)
 	Set objFSO = nothing
 END Function
 
-''ProduktId decodieren
+''ProduktId decodieren (NICHT VERÄNDERN)
 Function DecodeKey(RegKey)
    BinKey = objShell.RegRead(RegKey)
    CONST KeyOffset = 52
@@ -82,14 +83,10 @@ Function GetNWInfos
 	On Error Resume Next 
 	strComputer = "." 
 	Set objWMIService = GetObject("winmgmts:" & "{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2") 
- 
 	Set colItems = objWMIService.ExecQuery("Select * from Win32_NetworkAdapter") 
 	For Each objItem in colItems
 	IF Not objItem.MACAddress = "" and objItem.AdapterTypeID = 0 then
-	''IF objItem.AdapterTypeID = 1 then
-		''Save(strTRP(0) & " " & date & " I   " & strTRP(1) & " " & objItem.Description)
-		Save(strTRP(0) & " " & date & " ~   " & strTRP(1) & " MAC=" & objItem.MACAddress)
-	''END IF 
+		Save(iIHnr & " " & date & " ~   " & cAuthor & " MAC=" & objItem.MACAddress)
 	END IF
 	Next
 END Function 
