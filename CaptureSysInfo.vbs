@@ -7,21 +7,21 @@ Const Create = true
 Dim cAuthor, iIHnr
 strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.TRP" )
 
-''Arguments Aufruf und Formatierung
-''Argument1 = IH (XXXXX) ; Argument2 = ggf. Authorenkürzel
+''Arguments Aufruf und FormatierungMm
+''Argument1 = IH (XXXXX) ; Argument2 = ggf. Authorenkï¿½rzel
 Dim strTRP
 Set strTRP = WScript.arguments
 if len(strTRP(0)<6) then
 iIHnr = String(6-len(strTRP(0)),"0") & strTRP(0)	''IH Nummer muss Sechsstellig sein, Erste Ziffer unbedingt eine 0
 end if
-cAuthor = ucase(Left(strTRP(1),1))	''Authorenkürzel darf nur ein Zeichen lang und Groß sein
+cAuthor = ucase(Left(strTRP(1),1))	''Authorenkï¿½rzel darf nur ein Zeichen lang und Groï¿½ sein
 
 ''Haupt Programm
-Save("IA#7")	''Versions Hinweis für das mit den Daten weiterarbeitende Programm
+Save("IA#7")	''Versions Hinweis fï¿½r das mit den Daten weiterarbeitende Programm
 strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName") ''Liest das Betriebsystem aus
 strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE") ''Liest die installierte Architektur vom Betriebssystem aus
 IF Len(strName) > 0 THEN
-   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId") ''Liest die ProductID aus zum dekodieren des Lizenzschlüssels
+   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId") ''Liest die ProductID aus zum dekodieren des Lizenzschlï¿½ssels
 	Dim strTempOS
 	If instr(strName,"XP") > 0 then
 			strTempOS = "XP"
@@ -42,7 +42,7 @@ END IF
 ''Ende des Programms
 
 '''FUNKTIONEN
-'' Inhalt in Datei anhängen, wenn Datei nicht vorhanden, wird diese erstellt
+'' Inhalt in Datei anhï¿½ngen, wenn Datei nicht vorhanden, wird diese erstellt
 Function Save(Content)
 	Set objFSO = CreateObject("Scripting.FileSystemObject")
 	Set objFile = objFSO.OpenTextFile(strPath, ForAppending, True)
@@ -52,7 +52,7 @@ Function Save(Content)
 	Set objFSO = nothing
 END Function
 
-''ProduktId decodieren (NICHT VERÄNDERN)
+''ProduktId decodieren (NICHT VERï¿½NDERN)
 Function DecodeKey(RegKey)
    BinKey = objShell.RegRead(RegKey)
    CONST KeyOffset = 52
@@ -78,7 +78,7 @@ Function DecodeKey(RegKey)
    DecodeKey = szProductKey
 END Function
 
-''Mac Adresse und zugehöriges Interface
+''Mac Adresse und zugehï¿½riges Interface
 Function GetNWInfos
 	On Error Resume Next 
 	strComputer = "." 
