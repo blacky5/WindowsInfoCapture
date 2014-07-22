@@ -15,7 +15,7 @@ Dim strTRP
 Set strTRP = WScript.arguments
 
 '' Prüft nach Hilfe oder undefinierte Argumente
-if strTRP(0) = "" oder strTRP(1)="" then
+if strTRP(0) = "" or strTRP(1)="" then
   strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName")
   strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE")
   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId")
