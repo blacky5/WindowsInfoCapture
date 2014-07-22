@@ -10,9 +10,26 @@ strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\mail.trp" )
 dim intTVar
 
 ''Arguments Aufruf
-''Argument1 = IH (XXXXX) ; Argument2 = ggf. Authorenkürzel
+''Argument0 = IH (XXXXX) ; Argument1 = ggf. Authorenkürzel
 Dim strTRP
 Set strTRP = WScript.arguments
+
+'' Prüft nach Hilfe oder undefinierte Argumente
+if strTRP(0) = "" oder strTRP(1)="" then
+  strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName")
+  strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE")
+  strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId")
+  MsgBox (strName & vbCrLf & strOSType & vbCrLf & strKey, 0, "CaptureSys-Lizenzschlüssel")
+elseif strTRP(0) = "help" or strTRP = "?" then
+  MsgBox ("Wird das Programm ohne Parameter aufgerufen," & vbCrLf & 
+          "erscheint der Lizencode des Windows Systems"  & vbCrLf &
+          "ansonsten ist die Syntax: " & vbCrLf &
+          "CaptureSys.vbs [ID-Nr] [Autorekuerzel]" & vbCrLf &
+          "CaptureSys.vbs /help -> Diese Hilfe"
+          ,0,"CaptureSys - Hilfe")
+  WScript.Quit
+end if
+
 strPath = objShell.ExpandEnvironmentStrings( "%SystemDrive%\TEMP\" & strTRP(0) & ".trp" )
 
 ''Haupt Programm
