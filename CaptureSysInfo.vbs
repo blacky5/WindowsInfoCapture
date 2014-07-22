@@ -15,12 +15,12 @@ Dim strTRP
 Set strTRP = WScript.arguments
 
 '' Prüft nach Hilfe oder undefinierte Argumente
-if strTRP(0) = "" or strTRP(1)="" then
+if instr(strTRP(0),"") > 0 or instr(strTRP(1),"") > 0 then
   strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName")
   strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE")
   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId")
   MsgBox (strName & vbCrLf & strOSType & vbCrLf & strKey, 0, "CaptureSys-Lizenzschlüssel")
-elseif strTRP(0) = "help" or strTRP = "?" then
+elseif instr(strTRP(0),"help") > 0 or instr(strTRP(0),"?") > 0  then
   MsgBox ("Wird das Programm ohne Parameter aufgerufen," & vbCrLf & 
           "erscheint der Lizencode des Windows Systems"  & vbCrLf &
           "ansonsten ist die Syntax: " & vbCrLf &
