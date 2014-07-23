@@ -17,16 +17,11 @@ Set strTRP = WScript.arguments
 '' Prüft nach Hilfe oder undefinierte Argumente
 if instr(strTRP(0),"") > 0 or instr(strTRP(1),"") > 0 then
   strName = objShell.RegRead("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProductName")
-  strOSType = objShell.RegRead("HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\PROCESSOR_ARCHITECTURE")
   strKey = DecodeKey("HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\DigitalProductId")
-  MsgBox(strName & vbCrLf & strOSType & vbCrLf & strKey, 0, "CaptureSys-Lizenzschlüssel")
+  MsgBox"Produkt: " & vbTab & vbTab & strName & vbCrLf & "Produktschlüssel: " & vbTab & strKey, vbOKOnly or vbInformation, "Produktname und -schlüssel"
+  WScript.Quit
 elseif instr(strTRP(0),"help") > 0 or instr(strTRP(0),"?") > 0  then
-  MsgBox("Wird das Programm ohne Parameter aufgerufen," & vbCrLf & 
-          "erscheint der Lizencode des Windows Systems"  & vbCrLf &
-          "ansonsten ist die Syntax: " & vbCrLf &
-          "CaptureSys.vbs [ID-Nr] [Autorekuerzel]" & vbCrLf &
-          "CaptureSys.vbs /help -> Diese Hilfe"
-          ,0,"CaptureSys - Hilfe")
+  MsgBox "Wird das Programm ohne Parameter aufgerufen," & vbCrLf & "erscheint der Lizencode des Windows Systems"  & vbCrLf & "ansonsten ist die Syntax: " & vbCrLf & "CaptureSys.vbs [ID-Nr] [Autorekuerzel]" & vbCrLf & "CaptureSys.vbs /help -> Diese Hilfe" ,0,"CaptureSys - Hilfe"
   WScript.Quit
 end if
 
